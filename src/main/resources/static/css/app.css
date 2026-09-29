@@ -66,6 +66,7 @@ form {
 
 input,
 select,
+textarea,
 button,
 .button {
     box-sizing: border-box;
@@ -75,7 +76,8 @@ button,
 }
 
 input,
-select {
+select,
+textarea {
     border: 1px solid #abb2bd;
 }
 
@@ -138,9 +140,17 @@ td {
     margin-top: 20px;
 }
 
+.inventory-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
 @media (max-width: 720px) {
     .filters,
-    .page-heading {
+    .page-heading,
+    .inventory-grid {
         display: grid;
         grid-template-columns: 1fr;
     }
