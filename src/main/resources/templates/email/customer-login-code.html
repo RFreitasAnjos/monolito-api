@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de acesso Pastel da Hora</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Arial,Helvetica,sans-serif;color:#27272a;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+       style="width:100%;background-color:#f4f4f5;padding:32px 12px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                   style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e4e4e7;">
+                <tr>
+                    <td style="background:#c2410c;padding:28px 36px;color:#ffffff;">
+                        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">
+                            Pastel da Hora
+                        </div>
+                        <div style="font-size:26px;font-weight:700;margin-top:8px;">
+                            Código de acesso
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:36px;">
+                        <p style="font-size:17px;line-height:1.6;margin:0 0 18px;">
+                            Olá, <strong th:text="${name}">Cliente</strong>!
+                        </p>
+                        <p style="font-size:15px;line-height:1.7;margin:0 0 24px;color:#52525b;">
+                            Use o código abaixo para concluir seu acesso. Ele é pessoal,
+                            temporário e só pode ser utilizado uma vez.
+                        </p>
+                        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:24px;text-align:center;margin-bottom:24px;">
+                            <div style="font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#9a3412;">
+                                Seu código
+                            </div>
+                            <div th:text="${code}"
+                                 style="font-size:38px;font-weight:800;letter-spacing:10px;color:#7c2d12;margin:10px 0 8px;">
+                                123456
+                            </div>
+                            <div style="font-size:13px;color:#9a3412;">
+                                Válido até <strong th:text="${expiresAt}">29/09/2026 às 15:50</strong>
+                            </div>
+                        </div>
+                        <div style="background:#fafafa;border-left:4px solid #f97316;padding:16px 18px;margin-bottom:24px;">
+                            <p style="font-size:14px;line-height:1.6;margin:0;color:#3f3f46;">
+                                <strong>Proteja sua conta:</strong> não compartilhe este código.
+                                A Pastel da Hora nunca solicitará o código por telefone,
+                                e-mail ou WhatsApp.
+                            </p>
+                        </div>
+                        <p style="font-size:14px;line-height:1.6;margin:0;color:#71717a;">
+                            Se você não solicitou este acesso, ignore esta mensagem.
+                            Nenhuma ação adicional é necessária.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background:#fafafa;border-top:1px solid #e4e4e7;padding:20px 36px;text-align:center;">
+                        <p style="font-size:12px;line-height:1.5;margin:0;color:#a1a1aa;">
+                            Mensagem automática de segurança. Não responda este e-mail.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

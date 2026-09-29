@@ -12,6 +12,7 @@ import br.com.pasteldahora.employee.domain.exception.DuplicateEmployeeEmailExcep
 import br.com.pasteldahora.employee.domain.exception.EmployeeNotFoundException;
 import br.com.pasteldahora.employee.domain.exception.SelfDeactivationNotAllowedException;
 import br.com.pasteldahora.employee.domain.model.Employee;
+import br.com.pasteldahora.notification.application.service.EmailUseCases;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -23,15 +24,18 @@ import java.util.UUID;
 public final class EmployeeApplicationService implements EmployeeUseCase {
 
     private final EmployeeRepositoryPort repository;
+    private final EmailUseCases emailUseCases;
     private final PasswordHashPort passwordHashPort;
     private final Clock clock;
 
     public EmployeeApplicationService(
             EmployeeRepositoryPort repository,
+            EmailUseCases emailUseCases,
             PasswordHashPort passwordHashPort,
             Clock clock
     ) {
         this.repository = repository;
+        this.emailUseCases = emailUseCases;
         this.passwordHashPort = passwordHashPort;
         this.clock = clock;
     }
@@ -54,6 +58,9 @@ public final class EmployeeApplicationService implements EmployeeUseCase {
         if (repository.existsByEmail(employee.getEmail())) {
             throw new DuplicateEmployeeEmailException(employee.getEmail());
         }
+
+        emailUseCases.sendWelcomeEmailEmployee(command.email(), command.name());
+
         return repository.save(employee);
     }
 

@@ -4,6 +4,7 @@ import br.com.pasteldahora.employee.application.port.in.EmployeeUseCase;
 import br.com.pasteldahora.employee.application.port.out.EmployeeRepositoryPort;
 import br.com.pasteldahora.employee.application.port.out.PasswordHashPort;
 import br.com.pasteldahora.employee.application.service.EmployeeApplicationService;
+import br.com.pasteldahora.notification.application.service.EmailUseCases;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +21,11 @@ public class EmployeeModuleConfig {
     @Bean
     EmployeeUseCase employeeUseCase(
             EmployeeRepositoryPort repository,
+            EmailUseCases emailUseCases,
             PasswordHashPort passwordHashPort,
             Clock clock
     ) {
-        return new EmployeeApplicationService(repository, passwordHashPort, clock);
+        return new EmployeeApplicationService(repository, emailUseCases, passwordHashPort, clock);
     }
 
     @Bean
