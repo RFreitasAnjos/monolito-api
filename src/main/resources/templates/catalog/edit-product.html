@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/app.css}">
-    <title>Novo produto</title>
+    <title>Editar produto</title>
 </head>
 <body>
 <main class="container narrow">
     <section class="card">
-        <h1>Novo produto</h1>
-        <p th:if="${categories.isEmpty()}">
-            Cadastre uma categoria ativa antes de criar o produto.
-        </p>
-        <form th:action="@{/employee/catalog/products}" th:object="${form}" method="post">
+        <h1>Editar produto</h1>
+        <form th:action="@{/employee/catalog/products/{id}(id=${product.id})}"
+              th:object="${form}" method="post">
             <div class="alert error" th:if="${#fields.hasGlobalErrors()}"
                  th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
 
@@ -31,7 +29,6 @@
 
             <label for="categoryId">Categoria</label>
             <select id="categoryId" th:field="*{categoryId}">
-                <option value="">Selecione</option>
                 <option th:each="category : ${categories}" th:value="${category.id}"
                         th:text="${category.name}"></option>
             </select>
@@ -44,7 +41,6 @@
 
             <label for="inventoryPolicy">Política de estoque</label>
             <select id="inventoryPolicy" th:field="*{inventoryPolicy}">
-                <option value="">Selecione</option>
                 <option th:each="policy : ${inventoryPolicies}" th:value="${policy}"
                         th:text="${policy.description}"></option>
             </select>
@@ -55,8 +51,8 @@
                 Produto customizável pelo cliente
             </label>
             <p class="help-text">
-                Quando marcado, os ingredientes selecionados serão opções que o cliente
-                poderá adicionar. Caso contrário, formarão a composição fixa do produto.
+                Quando marcado, os ingredientes selecionados serão opções para o cliente.
+                Caso contrário, formarão a composição fixa.
             </p>
 
             <fieldset>
@@ -85,7 +81,7 @@
             </fieldset>
 
             <div class="actions">
-                <button type="submit" th:disabled="${categories.isEmpty()}">Cadastrar</button>
+                <button type="submit">Salvar</button>
                 <a class="button secondary" th:href="@{/employee/catalog/products}">Cancelar</a>
             </div>
         </form>

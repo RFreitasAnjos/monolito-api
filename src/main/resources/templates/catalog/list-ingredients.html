@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Ingredientes</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/catalog/products}">Produtos</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Ingredientes</h1>
+            <p>Itens disponíveis para composição e customização dos produtos.</p>
+        </div>
+        <a class="button" th:if="${canManage}"
+           th:href="@{/employee/catalog/ingredients/new}">Novo ingrediente</a>
+    </div>
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <section class="card table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Ingrediente</th>
+                <th>Unidade de estoque</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ingredient : ${ingredients}">
+                <td th:text="${ingredient.sku}"></td>
+                <td th:text="${ingredient.name}"></td>
+                <td th:text="${ingredient.stockUnit.description}"></td>
+                <td th:text="${ingredient.active ? 'Ativo' : 'Inativo'}"></td>
+                <td class="actions">
+                    <a th:if="${canManage}"
+                       th:href="@{/employee/catalog/ingredients/{id}/edit(id=${ingredient.id})}">
+                        Editar
+                    </a>
+                    <form th:if="${canManage and ingredient.active}"
+                          th:action="@{/employee/catalog/ingredients/{id}/deactivate(id=${ingredient.id})}"
+                          method="post">
+                        <button class="link-button danger" type="submit">Desativar</button>
+                    </form>
+                    <form th:if="${canManage and !ingredient.active}"
+                          th:action="@{/employee/catalog/ingredients/{id}/reactivate(id=${ingredient.id})}"
+                          method="post">
+                        <button class="link-button" type="submit">Reativar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${ingredients.isEmpty()}">
+                <td colspan="5">Nenhum ingrediente cadastrado.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

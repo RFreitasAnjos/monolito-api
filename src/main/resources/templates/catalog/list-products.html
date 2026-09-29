@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Produtos</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/dashboard}">Dashboard</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Produtos</h1>
+            <p>Dados comerciais e políticas de integração com o estoque.</p>
+        </div>
+        <div class="actions">
+            <a class="button secondary" th:href="@{/employee/catalog/categories}">Categorias</a>
+            <a class="button secondary" th:href="@{/employee/catalog/ingredients}">Ingredientes</a>
+            <a class="button" th:if="${canManage}"
+               th:href="@{/employee/catalog/products/new}">Novo produto</a>
+        </div>
+    </div>
+
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <form class="filters card" method="get" th:action="@{/employee/catalog/products}">
+        <div>
+            <label for="term">Nome ou SKU</label>
+            <input id="term" name="term" th:value="${term}">
+        </div>
+        <div>
+            <label for="categoryId">Categoria</label>
+            <select id="categoryId" name="categoryId">
+                <option value="">Todas</option>
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}"
+                        th:selected="${category.id == categoryFilter}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="active">Status</label>
+            <select id="active" name="active">
+                <option value="" th:selected="${activeFilter == null}">Todos</option>
+                <option value="true" th:selected="${activeFilter == true}">Ativos</option>
+                <option value="false" th:selected="${activeFilter == false}">Inativos</option>
+            </select>
+        </div>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <section class="card table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Customização</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products.content}">
+                <td th:text="${product.sku}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${categoriesById.get(product.categoryId).name}"></td>
+                <td th:text="${#numbers.formatCurrency(product.salePrice)}"></td>
+                <td th:text="${product.inventoryPolicy.description}"></td>
+                <td th:text="${product.customizable ? 'Customizável' : 'Composição fixa'}"></td>
+                <td th:text="${product.active ? 'Ativo' : 'Inativo'}"></td>
+                <td class="actions">
+                    <a th:if="${canManage}"
+                       th:href="@{/employee/catalog/products/{id}/edit(id=${product.id})}">
+                        Editar
+                    </a>
+                    <form th:if="${canManage and product.active}"
+                          th:action="@{/employee/catalog/products/{id}/deactivate(id=${product.id})}"
+                          method="post">
+                        <button class="link-button danger" type="submit">Desativar</button>
+                    </form>
+                    <form th:if="${canManage and !product.active}"
+                          th:action="@{/employee/catalog/products/{id}/reactivate(id=${product.id})}"
+                          method="post">
+                        <button class="link-button" type="submit">Reativar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${products.content.isEmpty()}">
+                <td colspan="8">Nenhum produto encontrado.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <nav class="pagination">
+        <a th:if="${products.page > 0}"
+           th:href="@{/employee/catalog/products(term=${term},active=${activeFilter},categoryId=${categoryFilter},page=${products.page - 1})}">
+            Anterior
+        </a>
+        <span th:text="|Página ${products.page + 1} de ${products.totalPages == 0 ? 1 : products.totalPages}|"></span>
+        <a th:if="${products.page + 1 < products.totalPages}"
+           th:href="@{/employee/catalog/products(term=${term},active=${activeFilter},categoryId=${categoryFilter},page=${products.page + 1})}">
+            Próxima
+        </a>
+    </nav>
+</main>
+</body>
+</html>

@@ -1,7 +1,9 @@
 package br.com.pasteldahora.catalog.domain.exception;
 
+import java.util.UUID;
+
 public class ProductNotFoundException extends RuntimeException {
-    public ProductNotFoundException(String productName) {
-        super("Já existe um produto cadastrado com o nome: " + productName + ".");
+    public ProductNotFoundException(UUID id) {
+        super("Produto não encontrado: " + id + ".");
     }
 }

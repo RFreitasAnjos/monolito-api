@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Nova categoria</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Nova categoria</h1>
+        <form th:action="@{/employee/catalog/categories}" th:object="${form}" method="post">
+            <label for="name">Nome</label>
+            <input id="name" th:field="*{name}">
+            <small class="error-text" th:errors="*{name}"></small>
+
+            <div class="actions">
+                <button type="submit">Cadastrar</button>
+                <a class="button secondary"
+                   th:href="@{/employee/catalog/categories}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

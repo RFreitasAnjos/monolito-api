@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Novo ingrediente</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Novo ingrediente</h1>
+        <form th:action="@{/employee/catalog/ingredients}" th:object="${form}" method="post">
+            <label for="sku">SKU</label>
+            <input id="sku" th:field="*{sku}">
+            <small class="error-text" th:errors="*{sku}"></small>
+            <label for="name">Nome</label>
+            <input id="name" th:field="*{name}">
+            <small class="error-text" th:errors="*{name}"></small>
+            <label for="description">Descrição</label>
+            <textarea id="description" rows="4" th:field="*{description}"></textarea>
+            <label for="stockUnit">Unidade de estoque</label>
+            <select id="stockUnit" th:field="*{stockUnit}">
+                <option value="">Selecione</option>
+                <option th:each="unit : ${units}" th:value="${unit}"
+                        th:text="${unit.description}"></option>
+            </select>
+            <small class="error-text" th:errors="*{stockUnit}"></small>
+            <div class="actions">
+                <button type="submit">Cadastrar</button>
+                <a class="button secondary" th:href="@{/employee/catalog/ingredients}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
