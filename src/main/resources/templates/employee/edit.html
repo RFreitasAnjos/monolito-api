@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Editar funcionário</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Editar funcionário</h1>
+        <p>CPF: <strong th:text="${employee.cpf}"></strong></p>
+        <form th:action="@{/employee/employees/{id}(id=${employee.id})}" th:object="${form}" method="post">
+            <label for="name">Nome</label>
+            <input id="name" th:field="*{name}">
+            <small class="error-text" th:errors="*{name}"></small>
+
+            <label for="email">E-mail corporativo</label>
+            <input id="email" type="email" th:field="*{email}">
+            <small class="error-text" th:errors="*{email}"></small>
+
+            <label for="password">Nova senha</label>
+            <input id="password" type="password" th:field="*{password}">
+            <small>Deixe em branco para manter a senha atual.</small>
+            <small class="error-text" th:errors="*{password}"></small>
+
+            <label for="position">Cargo</label>
+            <select id="position" th:field="*{position}">
+                <option th:each="position : ${positions}" th:value="${position}"
+                        th:text="${position.description}"></option>
+            </select>
+
+            <label for="accessRole">Perfil de acesso</label>
+            <select id="accessRole" th:field="*{accessRole}">
+                <option th:each="role : ${accessRoles}" th:value="${role}"
+                        th:text="${role.description}"></option>
+            </select>
+
+            <div class="actions">
+                <button type="submit">Salvar</button>
+                <a class="button secondary" th:href="@{/employee/employees}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Acesso gerencial</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Acesso gerencial</h1>
+        <p>Área exclusiva para funcionários autorizados.</p>
+        <div class="alert error" th:if="${param.error}">E-mail ou senha inválidos.</div>
+        <div class="alert success" th:if="${param.logout}">Sessão encerrada com sucesso.</div>
+        <form th:action="@{/employee/login}" method="post">
+            <label for="username">E-mail corporativo</label>
+            <input id="username" name="username" type="email" autocomplete="username" required autofocus>
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

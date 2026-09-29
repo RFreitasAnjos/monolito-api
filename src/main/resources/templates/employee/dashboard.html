@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Dashboard gerencial</title>
+</head>
+<body>
+<header class="topbar">
+    <strong>Pastel da Hora - Gestão</strong>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <section class="card">
+        <h1>Dashboard gerencial</h1>
+        <p>Usuário autenticado: <strong th:text="${username}">funcionário</strong></p>
+        <nav class="actions">
+            <a class="button" th:href="@{/employee/employees}">Gerenciar funcionários</a>
+        </nav>
+    </section>
+</main>
+</body>
+</html>

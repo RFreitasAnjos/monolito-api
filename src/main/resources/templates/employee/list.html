@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Funcionários</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/dashboard}">Dashboard</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Funcionários</h1>
+            <p>Contas com acesso exclusivo ao ambiente gerencial.</p>
+        </div>
+        <a class="button" th:if="${canManage}" th:href="@{/employee/employees/new}">Novo funcionário</a>
+    </div>
+
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <form class="filters card" method="get" th:action="@{/employee/employees}">
+        <div>
+            <label for="term">Nome, e-mail ou CPF</label>
+            <input id="term" name="term" th:value="${term}">
+        </div>
+        <div>
+            <label for="active">Status</label>
+            <select id="active" name="active">
+                <option value="" th:selected="${activeFilter == null}">Todos</option>
+                <option value="true" th:selected="${activeFilter == true}">Ativos</option>
+                <option value="false" th:selected="${activeFilter == false}">Inativos</option>
+            </select>
+        </div>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <section class="card table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Cargo</th>
+                <th>Acesso</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees.content}">
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.position.description}"></td>
+                <td th:text="${employee.accessRole.description}"></td>
+                <td th:text="${employee.active ? 'Ativo' : 'Inativo'}"></td>
+                <td class="actions">
+                    <a th:if="${canManage}"
+                       th:href="@{/employee/employees/{id}/edit(id=${employee.id})}">Editar</a>
+                    <form th:if="${canManage and employee.active}"
+                          th:action="@{/employee/employees/{id}/deactivate(id=${employee.id})}"
+                          method="post">
+                        <button class="link-button danger" type="submit">Desativar</button>
+                    </form>
+                    <form th:if="${canManage and !employee.active}"
+                          th:action="@{/employee/employees/{id}/reactivate(id=${employee.id})}"
+                          method="post">
+                        <button class="link-button" type="submit">Reativar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${employees.content.isEmpty()}">
+                <td colspan="6">Nenhum funcionário encontrado.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <nav class="pagination">
+        <a th:if="${employees.page > 0}"
+           th:href="@{/employee/employees(term=${term},active=${activeFilter},page=${employees.page - 1})}">
+            Anterior
+        </a>
+        <span th:text="|Página ${employees.page + 1} de ${employees.totalPages == 0 ? 1 : employees.totalPages}|"></span>
+        <a th:if="${employees.page + 1 < employees.totalPages}"
+           th:href="@{/employee/employees(term=${term},active=${activeFilter},page=${employees.page + 1})}">
+            Próxima
+        </a>
+    </nav>
+</main>
+</body>
+</html>

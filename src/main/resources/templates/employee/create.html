@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Novo funcionário</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Novo funcionário</h1>
+        <form th:action="@{/employee/employees}" th:object="${form}" method="post">
+            <div class="alert error" th:if="${#fields.hasGlobalErrors()}"
+                 th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+            <label for="name">Nome</label>
+            <input id="name" th:field="*{name}">
+            <small class="error-text" th:errors="*{name}"></small>
+
+            <label for="cpf">CPF</label>
+            <input id="cpf" th:field="*{cpf}">
+            <small class="error-text" th:errors="*{cpf}"></small>
+
+            <label for="email">E-mail corporativo</label>
+            <input id="email" type="email" th:field="*{email}">
+            <small class="error-text" th:errors="*{email}"></small>
+
+            <label for="password">Senha inicial</label>
+            <input id="password" type="password" th:field="*{password}">
+            <small class="error-text" th:errors="*{password}"></small>
+
+            <label for="position">Cargo</label>
+            <select id="position" th:field="*{position}">
+                <option value="">Selecione</option>
+                <option th:each="position : ${positions}" th:value="${position}"
+                        th:text="${position.description}"></option>
+            </select>
+
+            <label for="accessRole">Perfil de acesso</label>
+            <select id="accessRole" th:field="*{accessRole}">
+                <option value="">Selecione</option>
+                <option th:each="role : ${accessRoles}" th:value="${role}"
+                        th:text="${role.description}"></option>
+            </select>
+
+            <div class="actions">
+                <button type="submit">Cadastrar</button>
+                <a class="button secondary" th:href="@{/employee/employees}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
