@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Detalhes do pedido</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/orders}">Pedidos</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Pedido</h1>
+            <p th:text="${order.id}"></p>
+        </div>
+        <div>
+            <strong th:text="${order.status.description}"></strong>
+            <p th:text="|Total: ${#numbers.formatCurrency(order.totalAmount)}|"></p>
+        </div>
+    </div>
+
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <section class="card" th:if="${order.status.name() == 'OPEN'}">
+        <h2>Adicionar produto</h2>
+        <form th:action="@{/employee/orders/{id}/items(id=${order.id})}"
+              th:object="${itemForm}" method="post">
+            <div class="alert error" th:if="${#fields.hasGlobalErrors()}"
+                 th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+
+            <label for="productId">Produto</label>
+            <select id="productId" th:field="*{productId}">
+                <option value="">Selecione</option>
+                <option th:each="product : ${products}" th:value="${product.id}"
+                        th:text="|${product.name} - ${#numbers.formatCurrency(product.salePrice)}|">
+                </option>
+            </select>
+            <small class="error-text" th:errors="*{productId}"></small>
+
+            <label for="quantity">Quantidade</label>
+            <input id="quantity" type="number" min="0.001" step="0.001"
+                   th:field="*{quantity}">
+            <small class="error-text" th:errors="*{quantity}"></small>
+
+            <button type="submit">Adicionar</button>
+        </form>
+    </section>
+
+    <section class="card table-wrapper">
+        <h2>Itens</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço unitário</th>
+                <th>Subtotal</th>
+                <th th:if="${order.status.name() == 'OPEN'}">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${order.items}">
+                <td th:text="${item.sku}"></td>
+                <td th:text="${item.productName}"></td>
+                <td th:text="${#numbers.formatDecimal(item.quantity, 1, 3)}"></td>
+                <td th:text="${#numbers.formatCurrency(item.unitPrice)}"></td>
+                <td th:text="${#numbers.formatCurrency(item.subtotal)}"></td>
+                <td th:if="${order.status.name() == 'OPEN'}">
+                    <form th:action="@{/employee/orders/{id}/items/{itemId}/remove(id=${order.id},itemId=${item.id})}"
+                          method="post">
+                        <button class="link-button danger" type="submit">Remover</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${order.items.isEmpty()}">
+                <td th:colspan="${order.status.name() == 'OPEN' ? 6 : 5}">
+                    Nenhum item adicionado.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="actions" th:if="${order.status.name() == 'OPEN'}">
+        <form th:action="@{/employee/orders/{id}/complete(id=${order.id})}" method="post">
+            <button type="submit" th:disabled="${order.items.isEmpty()}">Concluir pedido</button>
+        </form>
+        <form th:action="@{/employee/orders/{id}/cancel(id=${order.id})}" method="post">
+            <button class="danger" type="submit">Cancelar pedido</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Pedidos</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/dashboard}">Dashboard</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Pedidos</h1>
+            <p>Registro de vendas e integração automática com o estoque.</p>
+        </div>
+        <form th:action="@{/employee/orders}" method="post">
+            <button type="submit">Novo pedido</button>
+        </form>
+    </div>
+
+    <section class="card table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Pedido</th>
+                <th>Criação</th>
+                <th>Itens</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Responsável</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.createdAt}"></td>
+                <td th:text="${order.items.size()}"></td>
+                <td th:text="${#numbers.formatCurrency(order.totalAmount)}"></td>
+                <td th:text="${order.status.description}"></td>
+                <td th:text="${order.updatedBy}"></td>
+                <td>
+                    <a th:href="@{/employee/orders/{id}(id=${order.id})}">Consultar</a>
+                </td>
+            </tr>
+            <tr th:if="${orders.isEmpty()}">
+                <td colspan="7">Nenhum pedido registrado.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
