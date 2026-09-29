@@ -10,6 +10,7 @@ import br.com.pasteldahora.employee.domain.exception.SelfDeactivationNotAllowedE
 import br.com.pasteldahora.employee.domain.model.Employee;
 import br.com.pasteldahora.employee.domain.model.EmployeeAccessRole;
 import br.com.pasteldahora.employee.domain.model.EmployeePosition;
+import br.com.pasteldahora.reporting.application.port.in.ManagementReportQuery;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -31,9 +32,14 @@ import java.util.UUID;
 public class EmployeeMvcController {
 
     private final EmployeeUseCase employeeUseCase;
+    private final ManagementReportQuery managementReportQuery;
 
-    public EmployeeMvcController(EmployeeUseCase employeeUseCase) {
+    public EmployeeMvcController(
+            EmployeeUseCase employeeUseCase,
+            ManagementReportQuery managementReportQuery
+    ) {
         this.employeeUseCase = employeeUseCase;
+        this.managementReportQuery = managementReportQuery;
     }
 
     @GetMapping("/login")
@@ -44,6 +50,7 @@ public class EmployeeMvcController {
     @GetMapping("/dashboard")
     public String dashboard(Authentication authentication, Model model) {
         model.addAttribute("username", authentication.getName());
+        model.addAttribute("report", managementReportQuery.getDashboard());
         return "employee/dashboard";
     }
 

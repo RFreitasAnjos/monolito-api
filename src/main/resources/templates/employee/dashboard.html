@@ -19,7 +19,40 @@
         <p>Usuário autenticado: <strong th:text="${username}">funcionário</strong></p>
         <nav class="actions">
             <a class="button" th:href="@{/employee/employees}">Gerenciar funcionários</a>
+            <a class="button" th:href="@{/employee/catalog/products}">Gerenciar catálogo</a>
+            <a class="button" th:href="@{/employee/inventory}">Gerenciar estoque</a>
+            <a class="button" th:href="@{/employee/orders}">Gerenciar pedidos</a>
         </nav>
+    </section>
+
+    <section class="card">
+        <h2>Indicadores financeiros</h2>
+        <div class="inventory-grid">
+            <div>
+                <strong>Compras acumuladas</strong>
+                <p th:text="${#numbers.formatCurrency(report.purchaseTotal)}"></p>
+            </div>
+            <div>
+                <strong>Receita de vendas</strong>
+                <p th:text="${#numbers.formatCurrency(report.salesRevenue)}"></p>
+            </div>
+            <div>
+                <strong>CMV</strong>
+                <p th:text="${#numbers.formatCurrency(report.costOfGoodsSold)}"></p>
+            </div>
+            <div>
+                <strong>Resultado bruto</strong>
+                <p th:text="${#numbers.formatCurrency(report.grossProfit)}"></p>
+            </div>
+            <div>
+                <strong>Margem bruta</strong>
+                <p th:text="|${#numbers.formatDecimal(report.grossMarginPercentage, 1, 2)}%|"></p>
+            </div>
+            <div>
+                <strong>Valor atual do estoque</strong>
+                <p th:text="${#numbers.formatCurrency(report.inventoryValue)}"></p>
+            </div>
+        </div>
     </section>
 </main>
 </body>
