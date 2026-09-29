@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Estoque</title>
+</head>
+<body>
+<header class="topbar">
+    <a th:href="@{/employee/dashboard}">Dashboard</a>
+    <form th:action="@{/employee/logout}" method="post">
+        <button class="link-button" type="submit">Sair</button>
+    </form>
+</header>
+<main class="container">
+    <div class="page-heading">
+        <div>
+            <h1>Estoque</h1>
+            <p>Saldos de produtos e ingredientes cadastrados no Catalog.</p>
+        </div>
+        <a class="button" th:if="${canManage}"
+           th:href="@{/employee/inventory/new}">Adicionar item ao estoque</a>
+    </div>
+
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+    <section class="card table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Tipo</th>
+                <th>Item</th>
+                <th>Unidade</th>
+                <th>Saldo</th>
+                <th>Estoque mínimo</th>
+                <th>Custo médio</th>
+                <th>Valor em estoque</th>
+                <th>Situação</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.sku}"></td>
+                <td th:text="${item.itemType.description}"></td>
+                <td th:text="${item.itemName}"></td>
+                <td th:text="${item.stockUnit.description}"></td>
+                <td th:text="${#numbers.formatDecimal(item.currentQuantity, 1, 3)}"></td>
+                <td th:text="${#numbers.formatDecimal(item.minimumQuantity, 1, 3)}"></td>
+                <td th:text="${#numbers.formatCurrency(item.averageUnitCost)}"></td>
+                <td th:text="${#numbers.formatCurrency(item.inventoryValue)}"></td>
+                <td th:text="${item.belowMinimum ? 'Abaixo do mínimo' : 'Regular'}"
+                    th:classappend="${item.belowMinimum} ? 'error-text'"></td>
+                <td>
+                    <a th:href="@{/employee/inventory/{id}(id=${item.stockItemId})}">
+                        Consultar
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${items.isEmpty()}">
+                <td colspan="10">Nenhum item de estoque cadastrado.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

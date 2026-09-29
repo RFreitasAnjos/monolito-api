@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Novo item de estoque</title>
+</head>
+<body>
+<main class="container narrow">
+    <section class="card">
+        <h1>Adicionar item ao estoque</h1>
+        <p th:if="${itemsAvailable.isEmpty()}">
+            Não existem produtos ou ingredientes disponíveis.
+        </p>
+        <form th:action="@{/employee/inventory}" th:object="${form}" method="post">
+            <div class="alert error" th:if="${#fields.hasGlobalErrors()}"
+                 th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+
+            <label for="itemReference">Produto ou ingrediente</label>
+            <select id="itemReference" th:field="*{itemReference}">
+                <option value="">Selecione</option>
+                <option th:each="item : ${itemsAvailable}"
+                        th:value="|${item.itemType}:${item.id}|"
+                        th:text="|${item.itemType.description} - ${item.sku} - ${item.name} (${item.stockUnit.description})|">
+                </option>
+            </select>
+            <small class="error-text" th:errors="*{itemReference}"></small>
+
+            <label for="minimumQuantity">Estoque mínimo</label>
+            <input id="minimumQuantity" type="number" min="0" step="0.001"
+                   th:field="*{minimumQuantity}">
+            <small class="error-text" th:errors="*{minimumQuantity}"></small>
+
+            <div class="actions">
+                <button type="submit" th:disabled="${itemsAvailable.isEmpty()}">Cadastrar</button>
+                <a class="button secondary" th:href="@{/employee/inventory}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
